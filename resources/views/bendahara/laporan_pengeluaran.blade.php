@@ -58,35 +58,44 @@
                     </div>
 
                     <div class="box box-primary" id="print-area">
-                        <div class="box-body table-responsive">
-                            <table class="table table-bordered table-striped">
-                                <thead class="bg-primary">
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Pengeluaran</th>
-                                        <th>Jumlah (Rp)</th>
-                                        <th>Tanggal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php $total_pengeluaran = 0; @endphp
-                                    @foreach ($transaksis as $item)
+                        <div class="box-body">
+                            <div class="text-center mb-4">
+                                <h3 style="margin-bottom: 0;">LAPORAN PENGELUARAN</h3>
+                                <p style="margin-top: 0;">
+                                    Periode: {{ date('d M Y', strtotime($tanggal_awal)) }} s/d {{ date('d M Y', strtotime($tanggal_akhir)) }}
+                                </p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="bg-primary">
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->description ?? '-' }}</td>
-                                            <td>Rp. {{ number_format($item->jumlah_pengeluaran, 0, ',', '.') }}</td>
-                                            <td>{{ $item->created_at->format('d M Y') }}</td>
+                                            <th>No</th>
+                                            <th>Nama Pengeluaran</th>
+                                            <th>Jumlah (Rp)</th>
+                                            <th>Tanggal</th>
                                         </tr>
-                                        @php $total_pengeluaran += $item->jumlah_pengeluaran; @endphp
-                                    @endforeach
-                                    <tr>
-                                        <th colspan="2" class="text-right">Total Pengeluaran</th>
-                                        <th colspan="2">Rp. {{ number_format($total_pengeluaran, 0, ',', '.') }}</th>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @php $total_pengeluaran = 0; @endphp
+                                        @foreach ($transaksis as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->description ?? '-' }}</td>
+                                                <td>Rp. {{ number_format($item->jumlah_pengeluaran, 0, ',', '.') }}</td>
+                                                <td>{{ $item->created_at->format('d M Y') }}</td>
+                                            </tr>
+                                            @php $total_pengeluaran += $item->jumlah_pengeluaran; @endphp
+                                        @endforeach
+                                        <tr>
+                                            <th colspan="2" class="text-right">Total Pengeluaran</th>
+                                            <th colspan="2">Rp. {{ number_format($total_pengeluaran, 0, ',', '.') }}</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+
 
                     @if (isset($total_pemasukan))
                         <div class="box box-success mt-3">
@@ -136,30 +145,41 @@
         @endif
     </script>
 
-    <style>
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-
-            #print-area,
-            #print-area * {
-                visibility: visible;
-            }
-
-            #print-area {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-
-            .btn,
-            form,
-            .breadcrumb,
-            .box-footer {
-                display: none !important;
-            }
+<style>
+    @media print {
+        body * {
+            visibility: hidden !important;
         }
-    </style>
+
+        #print-area, #print-area * {
+            visibility: visible !important;
+        }
+
+        #print-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            padding: 20px;
+            margin: 0;
+        }
+
+        #print-area table {
+            width: 100% !important;
+            border-collapse: collapse;
+        }
+
+        #print-area th,
+        #print-area td {
+            border: 1px solid #000;
+            padding: 5px;
+            font-size: 12px;
+        }
+
+        .btn, form, .breadcrumb, .box-footer, .content-header, .main-header, .main-sidebar {
+            display: none !important;
+        }
+    }
+</style>
+
 @endsection
